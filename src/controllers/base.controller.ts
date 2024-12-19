@@ -13,8 +13,6 @@ export abstract class BaseController<schema> {
         noPagination as boolean
       );
 
-      console.log(data.data, 'edroData');
-
       res.status(200).json(data);
     } catch (err) {
       next(err);
