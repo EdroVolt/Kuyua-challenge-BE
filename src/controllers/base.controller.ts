@@ -6,9 +6,15 @@ export abstract class BaseController<schema> {
   abstract readonly _serviceObj: BaseService<schema>;
 
   getAll = async (req: Request, res: Response, next: NextFunction) => {
-    const { page = 1 } = req.query;
+    const { page = 1, noPagination = false } = req.query;
     try {
-      const data = await this._serviceObj.findAll(+page);
+      const data = await this._serviceObj.findAll(
+        +page,
+        noPagination as boolean
+      );
+
+      console.log(data.data, 'edroData');
+
       res.status(200).json(data);
     } catch (err) {
       next(err);

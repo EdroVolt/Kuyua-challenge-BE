@@ -4,13 +4,17 @@ export abstract class BaseRepo<schema> {
   abstract readonly _collectionName: string;
   abstract readonly _model: Object;
 
-  findAll(filter: Object = {}, skip: number = 0, limit: number = 10) {
+  findAll(filter: Object = {}, skip?: number, limit?: number) {
     return new Promise((resolve, reject) => {
-      model(this._collectionName)
-        .find(filter)
-        .sort({ createdAt: -1 })
-        .skip(skip)
-        .limit(limit)
+      const query = model(this._collectionName).find(filter);
+
+      if (typeof skip === 'number' && typeof limit === 'number') {
+        query.sort({ createdAt: -1 }).skip(skip).limit(limit);
+      } else {
+        query.sort({ createdAt: -1 });
+      }
+
+      query
         .exec()
         .then((docs) => resolve(docs))
         .catch((err) => reject(err));
